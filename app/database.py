@@ -24,6 +24,10 @@ from sqlalchemy.orm import sessionmaker
 # immediately without installing Postgres first, then swap in real Postgres
 # once you deploy.
 DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./factorypulse.db")
+if DATABASE_URL.startswith("postgres://"):
+    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql+pg8000://", 1)
+elif DATABASE_URL.startswith("postgresql://"):
+    DATABASE_URL = DATABASE_URL.replace("postgresql://", "postgresql+pg8000://", 1)
 
 # connect_args is only needed for SQLite (it disallows multi-threaded access
 # by default, which FastAPI's async nature can trip over). Postgres doesn't
